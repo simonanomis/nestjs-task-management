@@ -47,3 +47,7 @@ $ npm run test:cov
 ## Create new module
 
 $ nest g module name_of_the_module
+
+## Create new controller
+
+$ nest g controller name_of_the_module --no-spec
