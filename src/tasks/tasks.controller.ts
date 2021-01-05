@@ -13,7 +13,7 @@ export class TasksController {
   }
 
   @Post()
-  createTask(@Body() request: CreateTaskDto): Task {
-    return this.tasksService.createTask(request.title, request.description);
+  createTask(@Body() createRequest: CreateTaskDto): Task {
+    return this.tasksService.createTask(createRequest);
   }
 }
