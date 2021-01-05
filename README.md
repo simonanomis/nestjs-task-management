@@ -51,3 +51,7 @@ $ nest g module name_of_the_module
 ## Create new controller
 
 $ nest g controller name_of_the_module --no-spec
+
+## Create new service
+
+$ nest g service name_of_the_module --no-spec
