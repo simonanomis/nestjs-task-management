@@ -8,3 +8,8 @@ export class CreateTaskDto {
 export class UpdateTaskDto {
   status: TaskStatus;
 }
+
+export class GetTasksFilterDto {
+  status: TaskStatus;
+  search: string;
+}
