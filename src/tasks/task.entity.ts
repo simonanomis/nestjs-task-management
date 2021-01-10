@@ -5,13 +5,13 @@ import {
   Entity,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { TaskStatus } from './task.model';
 import * as moment from 'moment';
+import { ETaskStatus } from './task.enums';
 
 @Entity()
 export class Task extends BaseEntity {
   @PrimaryGeneratedColumn('uuid', { name: 'id' })
-  id: number;
+  id: string;
 
   @Column('text', {
     nullable: false,
@@ -30,7 +30,7 @@ export class Task extends BaseEntity {
     default: 'OPEN',
     name: 'status',
   })
-  status: TaskStatus;
+  status: ETaskStatus;
 
   @Column('integer', {
     nullable: false,
