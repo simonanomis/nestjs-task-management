@@ -27,10 +27,32 @@ export class TaskRepository extends AbstractRepository<Task> {
     return await this.repository.save(taskObj);
   }
 
-  async findAllTasks(): Promise<ITask[]> {
-    const getLicensesQueryBuilder: SelectQueryBuilder<Task> = this.repository.createQueryBuilder(
+  async getTasks(filterDto: GetTasksFilterDto): Promise<ITask[]> {
+    const { status, search } = filterDto;
+    const getTasksQueryBuilder: SelectQueryBuilder<Task> = this.repository.createQueryBuilder(
       'taskmanagement',
     );
-    return await getLicensesQueryBuilder.getMany();
+    if (status) {
+      getTasksQueryBuilder.andWhere('taskmanagement.status= :status', {
+        status,
+      });
+    }
+
+    if (search) {
+      getTasksQueryBuilder.andWhere(
+        'taskmanagement.title LIKE :search OR taskmanagement.description LIKE :search',
+        { search: `%${search}%` },
+      );
+    }
+
+    return await getTasksQueryBuilder.getMany();
+  }
+
+  async deleteTask(id: string) {
+    const result = await this.repository.delete(id);
+
+    if (result.affected === 0) {
+      throw new NotFoundException(`Task with ID "${id}" not found`);
+    }
   }
 }
