@@ -20,6 +20,8 @@ $ nest --version
 
 ## Running the app
 
+yarn start:dev
+
 ```bash
 # development
 $ npm run start
