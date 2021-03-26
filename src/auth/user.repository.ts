@@ -2,7 +2,7 @@ import { AbstractRepository, EntityRepository, Repository } from 'typeorm';
 import { User } from './user.entity';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import * as bcrypt from 'bcrypt';
-import { getConnection } from 'typeorm';
+
 @EntityRepository(User)
 export class UserRepository extends AbstractRepository<User> {
   async signUp(authCredentials: AuthCredentialsDto): Promise<void> {
@@ -30,13 +30,18 @@ export class UserRepository extends AbstractRepository<User> {
     authCredentials: AuthCredentialsDto,
   ): Promise<string> {
     const { username, password } = authCredentials;
-    const user = await this.repository.findOne({ username });
+    const user = await this.findOneUser(username);
 
     if (user && (await user.validatePassword(password))) {
       return user.username;
     } else {
       return null;
     }
+  }
+
+  async findOneUser(username: string): Promise<User> {
+    const user = await this.repository.findOne({ username });
+    return user;
   }
 
   private async hashPassword(password: string, salt: string): Promise<string> {
