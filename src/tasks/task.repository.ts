@@ -2,6 +2,7 @@ import {
   AbstractRepository,
   EntityRepository,
   SelectQueryBuilder,
+  getConnection,
 } from 'typeorm';
 import { Task } from './task.entity';
 import { ITask } from './task.interface';
@@ -45,6 +46,8 @@ export class TaskRepository extends AbstractRepository<Task> {
       );
     }
 
+    //delete all
+    //await getConnection().createQueryBuilder().delete().from(Task).execute();
     return await getTasksQueryBuilder.getMany();
   }
 

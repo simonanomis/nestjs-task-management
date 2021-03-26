@@ -3,10 +3,12 @@ import {
   BeforeInsert,
   Column,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import * as moment from 'moment';
 import { ETaskStatus } from './task.enums';
+import { User } from '../auth/user.entity';
 
 @Entity()
 export class Task extends BaseEntity {
@@ -37,6 +39,9 @@ export class Task extends BaseEntity {
     name: 'created_at',
   })
   createdAt: number;
+
+  @ManyToOne((type) => User, (user) => user.tasks, { eager: false })
+  user: User;
 
   @BeforeInsert()
   setCreatedAt() {

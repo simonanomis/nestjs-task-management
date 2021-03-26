@@ -1,4 +1,4 @@
-import { AbstractRepository, EntityRepository, Repository } from 'typeorm';
+import { AbstractRepository, EntityRepository, getConnection } from 'typeorm';
 import { User } from './user.entity';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import * as bcrypt from 'bcrypt';
