@@ -3,6 +3,7 @@ import {
   BeforeInsert,
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -40,8 +41,12 @@ export class Task extends BaseEntity {
   })
   createdAt: number;
 
-  @ManyToOne((type) => User, (user) => user.tasks, { eager: false })
+  @ManyToOne(() => User, (user) => user.id, { eager: false })
+  @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @Column({ name: 'user_id', nullable: true })
+  userId: string;
 
   @BeforeInsert()
   setCreatedAt() {

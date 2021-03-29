@@ -1,4 +1,10 @@
-import { IsIn, IsNotEmpty, IsOptional } from 'class-validator';
+import {
+  IsIn,
+  IsNotEmpty,
+  IsOptional,
+  IsDefined,
+  IsUUID,
+} from 'class-validator';
 import { ETaskStatus } from '../task.enums';
 
 export class CreateTaskDto {
@@ -7,6 +13,10 @@ export class CreateTaskDto {
 
   @IsNotEmpty()
   description: string;
+
+  @IsDefined()
+  @IsUUID()
+  userId: string;
 }
 
 export class GetTasksFilterDto {

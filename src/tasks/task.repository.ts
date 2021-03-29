@@ -9,10 +9,12 @@ import { ITask } from './task.interface';
 import { ETaskStatus } from './task.enums';
 import { NotFoundException } from '@nestjs/common';
 import { CreateTaskDto, GetTasksFilterDto } from './dto/task.model.dto';
+import { User } from '../auth/user.entity';
+import { query } from 'express';
 
 @EntityRepository(Task)
 export class TaskRepository extends AbstractRepository<Task> {
-  async findById(id: string): Promise<ITask> {
+  async findById(id: string): Promise<Task> {
     const task = await this.repository.findOne(id);
     if (!task) {
       throw new NotFoundException(`Task with ID "${id}" not found`);
@@ -20,19 +22,27 @@ export class TaskRepository extends AbstractRepository<Task> {
     return task;
   }
 
-  async createTask(createTaskRequest: CreateTaskDto): Promise<ITask> {
+  async createTask(createTaskRequest: CreateTaskDto): Promise<Task> {
     const taskObj: Task = new Task();
     taskObj.title = createTaskRequest.title;
     taskObj.description = createTaskRequest.description;
     taskObj.status = ETaskStatus.OPEN;
-    return await this.repository.save(taskObj);
+    taskObj.userId = createTaskRequest.userId;
+    console.log('task repo:', taskObj);
+    await this.repository.save(taskObj);
+    return taskObj;
   }
 
-  async getTasks(filterDto: GetTasksFilterDto): Promise<ITask[]> {
+  async getTasks(filterDto: GetTasksFilterDto, user: User): Promise<Task[]> {
     const { status, search } = filterDto;
     const getTasksQueryBuilder: SelectQueryBuilder<Task> = this.repository.createQueryBuilder(
       'taskmanagement',
     );
+
+    // getTasksQueryBuilder.where('taskmanagement.userId = :userId', {
+    //   userId: user.id,
+    // });
+
     if (status) {
       getTasksQueryBuilder.andWhere('taskmanagement.status= :status', {
         status,
